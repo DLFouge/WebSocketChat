@@ -36,6 +36,8 @@ function onMessage(event){
 		var user_id = '#'+ name +"1";
 		remove_user(user_id,name);
 	}else if (data.endsWith("mss")){
-		add_message("silence",getRandomImg(),name,false);
+		var user_name = name.split(",")[0];
+		var message = name.substring(user_name.length + 1,name.length);
+		add_message(user_name,getRandomImg(),message,false);
 	}
 }

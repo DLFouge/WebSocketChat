@@ -136,7 +136,7 @@
 					//add the user to the page
 					add_user($name.val());
 					//send the user name to the server
-					webSocket.send($name.val());
+					webSocket.send($name.val() + "add");
 				}
 			});
 			$(".close").click(function(){
