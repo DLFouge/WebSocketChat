@@ -16,10 +16,10 @@ import javax.websocket.server.ServerEndpoint;
 
 @ServerEndpoint("/websocket")
 public class WebSocket {
+	//保存每个回话的信息
 	private static Map<String, Session> sessions = new HashMap<String, Session>();
-
+	//保存每个用户的信息
 	private static Map<String, String> names = new HashMap<String, String>();
-
 	@OnMessage
 	public void onMessage(String message, Session session) throws IOException, InterruptedException {
 		Set<String> keys = sessions.keySet();
@@ -36,24 +36,22 @@ public class WebSocket {
 			for (String key : keys) {
 				Session s = (Session) sessions.get(key);
 				if ((s.isOpen()) && (s.getId() != session.getId()) && (names.get(session.getId()) != null)) {
-					s.getBasicRemote().sendText((String) names.get(session.getId()) + "del");
-					System.out.println("客户端" + (String) names.get(session.getId()) + "下线！");
+					s.getBasicRemote().sendText(names.get(session.getId()) + "del");
+					System.out.println("客户端" + names.get(session.getId()) + "下线！");
 				}
 			}
 			return;
-		} else {
-			names.put(session.getId(), message.trim());
+		} else if (message.trim().endsWith("add")){
+			names.put(session.getId(), message.trim().substring(0, message.trim().length() - 3));
 			System.out.println("客户端 " + message + " 上线！session_id is " + session.getId());
 		}
 		for (String key : keys) {
 			Session s = (Session) sessions.get(key);
 			if ((s.isOpen()) && (s.getId() != session.getId())) {
 				if (message.trim().endsWith("mss")){
-					s.getBasicRemote().sendText(message.trim());
-					System.out.println(names.get(session.getId()));
-					
+					s.getBasicRemote().sendText(names.get(session.getId()) + "," +message.trim());
 				}else{					
-					s.getBasicRemote().sendText(message.trim() + "add");
+					s.getBasicRemote().sendText(message.trim());
 				}
 				System.out.println("发送成功！");
 			}
