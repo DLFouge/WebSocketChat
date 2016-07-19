@@ -17,7 +17,7 @@ WebSocket¡±±íÊ¾ÕâÊÇÒ»¸öÌØÊâµÄ HTTP ÇëÇó£¬ÇëÇóµÄÄ¿µÄ¾ÍÊÇÒª½«¿Í»§¶ËºÍ·şÎñÆ÷¶ËµÄÍ¨Ñ
 	¹ã²¥ÌáĞÑËùÓĞµÄ¿Í»§¶ËÓĞÓÃ»§ÏÂÏß²¢<br>
 3.ÏûÏ¢¹ã²¥´¦Àí<br>
 	¶ÔÓÚÄ³¸öÓÃ»§·¢ËÍµÄÏûÏ¢½øĞĞ¹ã²¥ĞÔµÄÍ¨ÖªËùÓĞµÄ¿Í»§¶Ë²¢´«ËÍ¸ÃÏûÏ¢<br>
----
+
 ##ÔËĞĞĞ§¹û
 ![image](https://github.com/silence940109/WebSocketChat/blob/master/images/img1.png)
 ![image](https://github.com/silence940109/WebSocketChat/blob/master/images/img2.png)
