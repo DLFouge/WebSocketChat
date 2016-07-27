@@ -1,4 +1,5 @@
 # 一款基于HTML5 WebSocket，Tomcat的在线及时聊天系统
+####在线测试地址 http://120.27.114.229/WebSocketChat/index.html (该地址是阿里云上的服务器地址，公网可用)
 ---HTML5 WebSocket API客户端与服务器端进行全双工通讯，WebSocket的出现是基于Web应用的实时性需要而产生的，它允
 许客户端和服务器在任意时刻互相推送消息。Web Socket是下一代客户端-服务器异步通讯的方法，它本事上任然是一个基于
 TCP的协议，它使用ws或wss协议，可用于任意的客户端和服务器。为了建立一个 WebSocket连接，客户端浏览器首先要向服
