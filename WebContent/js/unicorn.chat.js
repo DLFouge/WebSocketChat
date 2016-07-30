@@ -3,7 +3,8 @@ $(document).ready(function(){
 	$('.chat-message button').click(function(){
 		var input = $(this).siblings('span').children('input[type=text]');		
 		if(input.val() != ''){
-			add_message('You','img/demo/av1.jpg',input.val()+"mss",true);
+			webSocket.send(input.val()+"mss");//发送websocket消息
+			add_message('You','img/demo/av1.jpg',input.val(),true);
 		}		
 	});
 	$('.chat-message input').keypress(function(e){

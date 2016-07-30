@@ -2,15 +2,17 @@ var path = 'ws://' + window.location.host + "/" + window.location.pathname.split
 //我们连接到websocket 服务器端，使用构造函数 new WebSocket() 
 var webSocket = new WebSocket(path+'/websocket');
 //onError 当客户端-服务器通信发生错误时将会调用此方法。
-webSocket.onerror = function(event) {
-	onError(event)
-};
+webSocket.onerror = function(event) {onError(event)};
 //onOpen 我们创建一个连接到服务器的连接时将会调用此方法。
 webSocket.onopen = function(event) {onOpen(event);};
 //onMessage 当从服务器接收到一个消息时将会调用此方法。在我们的例子中，我们只是将从服务器获得的消息添加到DOM。
 webSocket.onmessage = function(event) {onMessage(event)};
-function onOpen(event) {}
-function onError(event) {alert("无法与服务器建立连接！请检查网络故障！");}
+function onOpen(event) {
+	$.tooltip("与服务器建立连接！",2000,true);
+}
+function onError(event) {
+	$.tooltip("与服务器无法建立连接，请检查网络或浏览器版本！",2000,false);
+}
 function getRandomImg(){
 	var random = parseInt(Math.random(1) * 3 + 1);
 	var img = "img/demo/av"+random+".jpg";
@@ -37,6 +39,7 @@ function onMessage(event){
 		remove_user(user_id,name);
 	}else if (data.endsWith("mss")){
 		var user_name = name.split(",")[0];
+		if (user_name == "" || user_name == "null") user_name = "匿名用户";
 		var message = name.substring(user_name.length + 1,name.length);
 		add_message(user_name,getRandomImg(),message,false);
 	}

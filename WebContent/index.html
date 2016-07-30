@@ -39,14 +39,12 @@
 		     <div class="theme-popbod dform">
 		           <form class="theme-signin" onsubmit="return false;" method="post">
 		                <ol>
-		                     <li><strong>name :</strong><input class="ipt" type="text" name="name" size="20" /></li>
+		                     <li><strong>name :</strong><input class="ipt" type="text" name="name" size="20" maxlength="30"/></li>
 		                     <li><input class="btn btn-primary" type="submit" name="submit" value="check" /></li>
 		                </ol>
 		           </form>
 		     </div>
 		</div>
-		        
-  	
 		<div id="content">
 			<div id="content-header">
 				<h1>Chat window</h1>
@@ -99,13 +97,12 @@
             <script src="js/bootstrap.min.js"></script>
             <script src="js/unicorn.js"></script>
             <script src="js/unicorn.chat.js"></script>
-            <script src="js/websocket.js"></script>
             <script src="js/theme.js"></script>            
             <script src="js/utils.js"></script>            
             <script src="js/jquery.hDialog.min.js"></script>            
+            <script src="js/websocket.js"></script>
 	</body>
 	<script type="text/javascript">
-		
 		jQuery(document).ready(function($) {
 			//弹出弹出层，只能点击一次
 			$(".newuser").one("click",function(){				
@@ -143,5 +140,6 @@
 				$('.theme-popover').slideUp(200);//关闭弹出层
 			});
 		});
+	
 	</script>
 </html>
