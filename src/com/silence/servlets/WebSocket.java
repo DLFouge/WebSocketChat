@@ -16,12 +16,13 @@ import javax.websocket.server.ServerEndpoint;
 
 @ServerEndpoint("/websocket")
 public class WebSocket {
-	//保存每个回话的信息
+	// 保存每个回话的信息
 	private static Map<String, Session> sessions = new HashMap<String, Session>();
-	//保存每个用户的信息
+	// 保存每个用户的信息
 	private static Map<String, String> names = new HashMap<String, String>();
 	@OnMessage
 	public void onMessage(String message, Session session) throws IOException, InterruptedException {
+		System.out.println("message------------");
 		Set<String> keys = sessions.keySet();
 		if ("urs".equals(message)) {
 			if (!names.isEmpty()) {
@@ -32,7 +33,7 @@ public class WebSocket {
 				session.getBasicRemote().sendText(namelist.append("urs").toString());
 			}
 			return;
-		}else if ("client_close".equals(message.trim())) {
+		} else if ("client_close".equals(message.trim())) {
 			for (String key : keys) {
 				Session s = (Session) sessions.get(key);
 				if ((s.isOpen()) && (s.getId() != session.getId()) && (names.get(session.getId()) != null)) {
@@ -41,23 +42,22 @@ public class WebSocket {
 				}
 			}
 			return;
-		} else if (message.trim().endsWith("add")){
+		} else if (message.trim().endsWith("add")) {
 			names.put(session.getId(), message.trim().substring(0, message.trim().length() - 3));
 			System.out.println("客户端 " + message + " 上线！session_id is " + session.getId());
 		}
 		for (String key : keys) {
 			Session s = (Session) sessions.get(key);
 			if ((s.isOpen()) && (s.getId() != session.getId())) {
-				if (message.trim().endsWith("mss")){
-					s.getBasicRemote().sendText(names.get(session.getId()) + "," +message.trim());
-				}else{					
+				if (message.trim().endsWith("mss")) {
+					s.getBasicRemote().sendText(names.get(session.getId()) + "," + message.trim());
+				} else {
 					s.getBasicRemote().sendText(message.trim());
 				}
 				System.out.println("发送成功！");
 			}
 		}
 	}
-
 	@OnOpen
 	public void onOpen(Session session, EndpointConfig config) {
 		System.out.println("客户端建立链接,session_id = " + session.getId());
@@ -82,10 +82,8 @@ public class WebSocket {
 			e.printStackTrace();
 		}
 	}
-
 	@OnError
 	public void onError(Session session, Throwable throwable) {
 		System.out.println("服务器出错.....session_id = " + session.getId());
 	}
-
 }
