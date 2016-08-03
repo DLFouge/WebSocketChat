@@ -1,6 +1,8 @@
 package com.silence.servlets;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -14,15 +16,21 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 @ServerEndpoint("/websocket")
 public class WebSocket {
-	// ±£´æÃ¿¸ö»Ø»°µÄĞÅÏ¢
+	
+	private static final Logger logger = LoggerFactory.getLogger(WebSocket.class);
+	// ä¿å­˜æ¯ä¸ªå›è¯çš„ä¿¡æ¯
 	private static Map<String, Session> sessions = new HashMap<String, Session>();
-	// ±£´æÃ¿¸öÓÃ»§µÄĞÅÏ¢
+	// ä¿å­˜æ¯ä¸ªç”¨æˆ·çš„ä¿¡æ¯
 	private static Map<String, String> names = new HashMap<String, String>();
+
 	@OnMessage
 	public void onMessage(String message, Session session) throws IOException, InterruptedException {
-		System.out.println("message------------");
 		Set<String> keys = sessions.keySet();
 		if ("urs".equals(message)) {
 			if (!names.isEmpty()) {
@@ -35,32 +43,34 @@ public class WebSocket {
 			return;
 		} else if ("client_close".equals(message.trim())) {
 			for (String key : keys) {
-				Session s = (Session) sessions.get(key);
+				Session s = sessions.get(key);
 				if ((s.isOpen()) && (s.getId() != session.getId()) && (names.get(session.getId()) != null)) {
 					s.getBasicRemote().sendText(names.get(session.getId()) + "del");
-					System.out.println("¿Í»§¶Ë" + names.get(session.getId()) + "ÏÂÏß£¡");
+					logger.info(getTime() + "å®¢æˆ·ç«¯" + names.get(session.getId()) + "ä¸‹çº¿ï¼");
 				}
 			}
 			return;
 		} else if (message.trim().endsWith("add")) {
 			names.put(session.getId(), message.trim().substring(0, message.trim().length() - 3));
-			System.out.println("¿Í»§¶Ë " + message + " ÉÏÏß£¡session_id is " + session.getId());
+			logger.info(getTime() + "å®¢æˆ·ç«¯ " + message + " ä¸Šçº¿ï¼session_id is " + session.getId());
 		}
 		for (String key : keys) {
-			Session s = (Session) sessions.get(key);
+			Session s = sessions.get(key);
 			if ((s.isOpen()) && (s.getId() != session.getId())) {
 				if (message.trim().endsWith("mss")) {
+					logger.info(getTime() + message.trim());
 					s.getBasicRemote().sendText(names.get(session.getId()) + "," + message.trim());
 				} else {
 					s.getBasicRemote().sendText(message.trim());
+					logger.info(getTime() + "æ¶ˆæ¯å‘é€æˆåŠŸ");
 				}
-				System.out.println("·¢ËÍ³É¹¦£¡");
 			}
 		}
 	}
+
 	@OnOpen
 	public void onOpen(Session session, EndpointConfig config) {
-		System.out.println("¿Í»§¶Ë½¨Á¢Á´½Ó,session_id = " + session.getId());
+		logger.info(getTime() +"å®¢æˆ·ç«¯å»ºç«‹é“¾æ¥,session_id = " + session.getId());
 		try {
 			sessions.put(session.getId(), session);
 			onMessage("urs", session);
@@ -72,7 +82,7 @@ public class WebSocket {
 	@OnClose
 	public void onClose(Session session, CloseReason reason) {
 		try {
-			System.out.println("¿Í»§¶Ë¹Ø±ÕÁ¬½Ó,session_id=" + session.getId());
+			logger.info(getTime() + "å®¢æˆ·ç«¯å…³é—­è¿æ¥,session_id=" + session.getId());
 			onMessage("client_close", session);
 			synchronized (sessions) {
 				sessions.remove(session.getId());
@@ -82,8 +92,12 @@ public class WebSocket {
 			e.printStackTrace();
 		}
 	}
+
 	@OnError
 	public void onError(Session session, Throwable throwable) {
-		System.out.println("·şÎñÆ÷³ö´í.....session_id = " + session.getId());
+		logger.info("æœåŠ¡å™¨å‡ºé”™ï¼Œå‡ºé”™çš„session_idä¸º" + session.getId());
+	}
+	public static String getTime(){
+		return new SimpleDateFormat("yyyy-mm-dd HH-MM-ss").format(new Date());
 	}
 }
